@@ -1,10 +1,11 @@
-function [measure] = CTKCCA(data, ridx, target_data, ratio)
+function [train_new,train_label,test_new,test_label] = CTKCCA(data, target_data)
 % cost-sentitive transfer KCCA (one source to one target)
 
 source_data=data;
 [train_data,train_label]=normN2_source(source_data);
-[~,~,test_data,test_label]=normN2_target(target_data,ridx,ratio);
-% disp(size(train_data))
+% [~,~,test_data,test_label]=normN2_target(target_data,ridx,ratio);
+[test_data,test_label]=normN2_source(target_data)%,ridx,ratio);
+%  disp(size(train_data))
 % disp(size(test_data))
 
 lrank = 70;  % number of components in incomplete Cholesky decompose
@@ -41,7 +42,6 @@ end
 Ctt = Kt'*Kt+reg*eye(size(Kt,2));
 
 [Ws,Wt,~] = eigDecomposition(Css,Ctt,Cst);
-disp(Ws)
 
 dim = ceil(size(train_data,1)*0.15); % tune the projected dimension 
 
@@ -49,12 +49,4 @@ Wxx = Ws(:,1:dim);
 Wyy = Wt(:,1:dim);
 train_new = Ks*Wxx;
 test_new = Kt*Wyy;
-
-% LR
-model = train(train_label', sparse(real(train_new)),'-s 0 -c 1 -B -1 -q'); % num * fec
-[~,~, prob_estimates] = predict(test_label', sparse(real(test_new)), model,'-b 1');
-score = prob_estimates(:,1)';
-
-mea = performanceMeasure(test_label,score);
-measure = mea;
 end

@@ -8,12 +8,14 @@ source_name = name;
 
 % feature selection for source data
 r=fs_ratio;
-source_data=featureSelection(source_data,source_name,source_metric,selection_method,r);
+% source_data=featureSelection(source_data,source_name,source_metric,selection_method,r);
 % preprocess source data
 [Xs,Ys] =  preprocess_source(source_data);
    
 % matching metric
 [train_new,test_new] = matchingMetric(Xs,Xt);
+train_new = zscore(train_new,0,2);
+disp(size(Xs))
        
 if ~isempty(train_new)
     train_new = zscore(train_new,0,2);

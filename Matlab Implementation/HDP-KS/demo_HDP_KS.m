@@ -1,19 +1,19 @@
 clc
 clear
-addpath('..\Tools\liblinear\');
-addpath('..\Tools\weka_use\');
-addpath('..\Tools\')
-addpath('.\utility\');
+addpath('Tools/liblinear/');
+addpath('Tools/')
+addpath('Tools/weka_use/');
+addpath('HDP-KS/utility/');
 
-target_path='..\DS2\';
+target_path='DS2/';
 all_target_file=dir(target_path);
 target_file_num=length(all_target_file);
 
 %save path
-save_path = '.\output\';
-if ~exist(save_path) 
-    mkdir(save_path)
-end
+% save_path = 'HDP-KS/output/';
+% if ~exist(save_path) 
+%     mkdir(save_path)
+% end
 
 % conduct the experiment
 Rep = 20; % runs
@@ -41,8 +41,8 @@ for i=1:target_file_num-2
                 result = [result; measure];
             end
             detail_result = result;
-            savepath=[save_path,source_project.name,'_to_',target_project.name,'.mat'];
-            save(savepath,'detail_result')
+%             savepath=[save_path,source_project.name,'_to_',target_project.name,'.mat'];
+%             save(savepath,'detail_result')
         end
     end
 end

@@ -1,15 +1,15 @@
 clc
 clear
-addpath('..\Tools\liblinear\');
-addpath('..\Tools\')
-addpath('.\utility\');
+addpath('Tools/liblinear/');
+addpath('Tools/')
+addpath('CTKCCA/utility/');
 
-target_path='..\DS2\';
+target_path='DS2/';
 all_target_file=dir(target_path);
 target_file_num=length(all_target_file);
 
 %save path
-save_path = '.\output\';
+save_path = 'CTKCCA/output/';
 if ~exist(save_path) 
     mkdir(save_path)
 end
@@ -23,12 +23,14 @@ for i=1:target_file_num-2
     % load source project
     load([target_path,target_file]);
     source_project=project;
+    %disp(source_project)
     
     for j=1:target_file_num-2
         target_file=all_target_file(j+2).name;
         % load target project
         load([target_path,target_file]);
         target_project=project;
+        %disp(target_project)
         
         result = [];detail_result=[];
         
@@ -36,7 +38,8 @@ for i=1:target_file_num-2
            % predict A source-> A target
            sd=[source_project.data';source_project.label'];
            td=[target_project.data';target_project.label'];
-                
+%            disp(size(source_project.data))
+%            disp(size(target_project.data))
            for loop = 1:Rep
                 measure=CTKCCA(sd,target_project.randomidx(loop,:),td,ratio);
                 result = [result; measure];
