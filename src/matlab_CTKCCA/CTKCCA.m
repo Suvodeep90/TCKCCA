@@ -26,6 +26,7 @@ def_n = length(find(temp==1));
 nodef_n = length(find(temp==2));
 c = 2; % classes
 cost(1) = 1; 
+% cost(2) = 1;
 cost(2) = nodef_n/def_n;
 Css = 0;
 Cst = 0;
