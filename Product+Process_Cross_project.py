@@ -252,7 +252,7 @@ def run(projects,all_projects):
 
 
 
-projects = projects[0:10]
+#projects = projects[0:10]
 threads = []
 results = {}
 results['precision'] = {}
@@ -264,8 +264,8 @@ results['auc'] = {}
 results['pci_20'] = {}
 results['ifa'] = {}
 cores = cpu_count()
-split_projects = np.array_split(projects, cores)
-for i in range(cores):
+split_projects = np.array_split(projects, cores*2)
+for i in range(cores*2):
     print("starting thread ",i)
     t = ThreadWithReturnValue(target = run, args = [split_projects[i],projects])
     threads.append(t)
