@@ -218,6 +218,8 @@ def run(projects,all_projects):
 
 
 if __name__ == "__main__":
+    proj_df = pd.read_csv('projects.csv')
+    projects = proj_df.repo_name.tolist()
     threads = []
     results = {}
     results['precision'] = {}
