@@ -23,7 +23,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.decomposition import PCA
-from pyearth import Earth
+# from pyearth import Earth
 from sklearn.experimental import enable_iterative_imputer  
 from sklearn.impute import IterativeImputer
 from sklearn.model_selection import StratifiedKFold
@@ -175,26 +175,30 @@ def run_self_k(project,projects,metric):
     clf.fit(X_train,y_train)
     importance = clf.feature_importances_
     for _project in projects:
-        X_test,y_test = load_both_data(_project,metric)
-        if metric == 'process':
-            loc = X_test['file_la'] + X_test['file_lt']
-        elif metric == 'product':
-            loc = X_test.CountLineCode
-        else:
-            loc = X_test['file_la'] + X_test['file_lt']
-        predicted = clf.predict(X_test)
-        abcd = metrices.measures(y_test,predicted,loc)
-        pf.append(abcd.get_pf())
-        recall.append(abcd.calculate_recall())
-        precision.append(abcd.calculate_precision())
-        f1.append(abcd.calculate_f1_score())
-        g_score.append(abcd.get_g_score())
-        pci_20.append(abcd.get_pci_20())
-        ifa.append(abcd.get_ifa())
         try:
-            auc.append(roc_auc_score(y_test, predicted))
-        except:
-            auc.append(0)
+            X_test,y_test = load_both_data(_project,metric)
+            if metric == 'process':
+                loc = X_test['file_la'] + X_test['file_lt']
+            elif metric == 'product':
+                loc = X_test.CountLineCode
+            else:
+                loc = X_test['file_la'] + X_test['file_lt']
+            predicted = clf.predict(X_test)
+            abcd = metrices.measures(y_test,predicted,loc)
+            pf.append(abcd.get_pf())
+            recall.append(abcd.calculate_recall())
+            precision.append(abcd.calculate_precision())
+            f1.append(abcd.calculate_f1_score())
+            g_score.append(abcd.get_g_score())
+            pci_20.append(abcd.get_pci_20())
+            ifa.append(abcd.get_ifa())
+            try:
+                auc.append(roc_auc_score(y_test, predicted))
+            except:
+                auc.append(0)
+        except Exception as e:
+            print('error in test',_project,e)
+            continue
     return recall,precision,pf,f1,g_score,auc,pci_20,ifa,importance
 
 
@@ -226,7 +230,7 @@ def run(projects,all_projects):
             ifa_list[project] = ifa
             featue_importance[project] = importance
         except Exception as e:
-            print(e)
+            print('error in train',project,e)
             continue
     final_result = {}
     final_result['precision'] = precision_list
@@ -244,7 +248,9 @@ def run(projects,all_projects):
 
 if __name__ == "__main__":
     proj_df = pd.read_csv('projects.csv')
-    projects = proj_df.repo_name.tolist()
+    # proj_df = proj_df[proj_df['repo_name']== 'environment-dashboard']
+    projects = proj_df.repo_name.tolist() 
+    projects = projects[150:]
     threads = []
     results = {}
     results['precision'] = {}
