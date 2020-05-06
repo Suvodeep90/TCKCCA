@@ -1,3 +1,3 @@
 #!/bin/sh
 #SBATCH -p max
-python Product+Process_Cross_project.py
+python File_Cross_Prediction.py
