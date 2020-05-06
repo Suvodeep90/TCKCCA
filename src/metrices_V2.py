@@ -69,7 +69,7 @@ class measures(object):
                 break
         pred_vals = self.dframe['Predicted'].values[:i]
         ifa = int(sum(pred_vals) / (i + 1) * 100)
-        return i
+        return ifa
     
     def get_ifa_roc(self):
         ifa_x = []
